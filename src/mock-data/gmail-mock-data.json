@@ -1,0 +1,310 @@
+{
+  "messages": [
+    {
+      "id": "msg_12345abc",
+      "threadId": "thread_abc123",
+      "from": "Sarah Chen <sarah.c@techcorp.io>",
+      "subject": "Q1 Roadmap & SDK Integration",
+      "date": "2026-02-23T10:15:00Z",
+      "snippet": "Hi team, I've reviewed the TypeScript AI SDK docs. We need to decide between streaming and...",
+      "labels": [
+        "INBOX",
+        "IMPORTANT",
+        "Work"
+      ],
+      "hasAttachments": true
+    },
+    {
+      "id": "msg_67890def",
+      "threadId": "thread_def456",
+      "from": "Ollama Updates <noreply@ollama.ai>",
+      "subject": "New Model Alert: Llama 3.2 available now",
+      "date": "2026-02-22T14:30:00Z",
+      "snippet": "The latest vision-capable models are here. You can now run llama3.2 locally using the...",
+      "labels": [
+        "INBOX",
+        "Promotions"
+      ],
+      "hasAttachments": false
+    },
+    {
+      "id": "msg_11223ghi",
+      "threadId": "thread_ghi789",
+      "from": "Alex Rivera <alex.r@freelance.com>",
+      "subject": "Inquiry regarding API limits",
+      "date": "2026-02-21T09:00:00Z",
+      "snippet": "Regarding our conversation yesterday, I noticed we are hitting the 100 requests/day limit on...",
+      "labels": [
+        "INBOX",
+        "Support"
+      ],
+      "hasAttachments": false
+    },
+    {
+      "id": "msg_44556jkl",
+      "threadId": "thread_jkl012",
+      "from": "Google Cloud Security <no-reply@accounts.google.com>",
+      "subject": "Security alert: New sign-in on macOS",
+      "date": "2026-02-20T18:45:10Z",
+      "snippet": "Your Google Account was just signed in to from a new macOS device. If this was you...",
+      "labels": [
+        "SYSTEM",
+        "Security"
+      ],
+      "hasAttachments": false
+    },
+    {
+      "id": "msg_77889mno",
+      "threadId": "thread_mno345",
+      "from": "FinOps Team <finance@techcorp.io>",
+      "subject": "Monthly AWS & Vercel Usage Report - January",
+      "date": "2026-02-19T11:00:00Z",
+      "snippet": "Our Vercel spend increased by 15% this month due to the high volume of Edge Function calls...",
+      "labels": [
+        "Work",
+        "Finance"
+      ],
+      "hasAttachments": true
+    },
+    {
+      "id": "msg_99001pqr",
+      "threadId": "thread_abc123",
+      "from": "Sarah Chen <sarah.c@techcorp.io>",
+      "subject": "Re: Q1 Roadmap & SDK Integration",
+      "date": "2026-02-23T11:45:00Z",
+      "snippet": "Following up on my previous email, Marcus suggested we also look into the new Python SDK...",
+      "labels": [
+        "INBOX",
+        "Work"
+      ],
+      "hasAttachments": false
+    },
+    {
+      "id": "msg_11234rst",
+      "threadId": "thread_rst111",
+      "from": "Design Team <design@techcorp.io>",
+      "subject": "Figma mockups for AI chat interface",
+      "date": "2026-02-23T14:20:00Z",
+      "snippet": "Hi all, attached are the latest designs for the chat UI. Please review the dark mode variants...",
+      "labels": [
+        "INBOX",
+        "Work",
+        "Design"
+      ],
+      "hasAttachments": true
+    },
+    {
+      "id": "msg_22345tuv",
+      "threadId": "thread_tuv222",
+      "from": "HR Notifications <hr@techcorp.io>",
+      "subject": "Reminder: Performance review cycle starts Monday",
+      "date": "2026-02-23T08:00:00Z",
+      "snippet": "This is a reminder that the Q1 performance review cycle begins on March 2nd. Please submit...",
+      "labels": [
+        "INBOX",
+        "IMPORTANT",
+        "Work"
+      ],
+      "hasAttachments": false
+    },
+    {
+      "id": "msg_33456wxy",
+      "threadId": "thread_wxy333",
+      "from": "Vercel <notifications@vercel.com>",
+      "subject": "Deployment failed: ai-assistant-staging",
+      "date": "2026-02-22T16:45:00Z",
+      "snippet": "Your deployment to ai-assistant-staging failed due to a TypeScript error in the build...",
+      "labels": [
+        "INBOX",
+        "IMPORTANT",
+        "Work"
+      ],
+      "hasAttachments": false
+    },
+    {
+      "id": "msg_44567zab",
+      "threadId": "thread_zab444",
+      "from": "Marcus Vance <marcus.v@techcorp.io>",
+      "subject": "Re: Figma mockups for AI chat interface",
+      "date": "2026-02-23T15:30:00Z",
+      "snippet": "Thanks for the designs. The mobile layout looks good. One question: should we support...",
+      "labels": [
+        "INBOX",
+        "Work"
+      ],
+      "hasAttachments": false
+    },
+    {
+      "id": "msg_55678cde",
+      "threadId": "thread_cde555",
+      "from": "GitHub <notifications@github.com>",
+      "subject": "Pull request #142 merged: feat/ollama-provider",
+      "date": "2026-02-22T12:15:00Z",
+      "snippet": "marcus-vance merged pull request #142 into main. feat: add Ollama provider for local dev...",
+      "labels": [
+        "INBOX",
+        "Work"
+      ],
+      "hasAttachments": false
+    },
+    {
+      "id": "msg_66789fgh",
+      "threadId": "thread_fgh666",
+      "from": "Slack Digest <digest@slack.com>",
+      "subject": "Your weekly Slack digest",
+      "date": "2026-02-21T09:00:00Z",
+      "snippet": "You had 47 unread messages. Top channels: #ai-sdk, #general, #dev-ops. Here's what you missed...",
+      "labels": [
+        "INBOX",
+        "Promotions"
+      ],
+      "hasAttachments": false
+    },
+    {
+      "id": "msg_77890ijk",
+      "threadId": "thread_ijk777",
+      "from": "DevOps <devops@techcorp.io>",
+      "subject": "Scheduled maintenance: Staging environment",
+      "date": "2026-02-24T07:00:00Z",
+      "snippet": "Staging will be down for 2 hours on Saturday for database migration. Please save your work...",
+      "labels": [
+        "INBOX",
+        "Work"
+      ],
+      "hasAttachments": false
+    },
+    {
+      "id": "msg_88901klm",
+      "threadId": "thread_klm888",
+      "from": "Jenny Kim <jenny.k@techcorp.io>",
+      "subject": "Benchmark results: 3B vs 8B model",
+      "date": "2026-02-24T17:30:00Z",
+      "snippet": "As promised, here are the latency numbers. 3B averages 200ms per token, 8B is around 450ms...",
+      "labels": [
+        "INBOX",
+        "Work"
+      ],
+      "hasAttachments": true
+    },
+    {
+      "id": "msg_99012mno",
+      "threadId": "thread_mno999",
+      "from": "OpenAI <updates@openai.com>",
+      "subject": "New GPT-4o mini pricing",
+      "date": "2026-02-23T12:00:00Z",
+      "snippet": "We've reduced input token pricing by 50% for GPT-4o mini. Check out the updated rate limits...",
+      "labels": [
+        "INBOX",
+        "Promotions"
+      ],
+      "hasAttachments": false
+    },
+    {
+      "id": "msg_10123opq",
+      "threadId": "thread_opq101",
+      "from": "David Ross <david.r@techcorp.io>",
+      "subject": "Zod schema draft for extraction module",
+      "date": "2026-02-24T09:15:00Z",
+      "snippet": "Attached is the draft schema. Let me know if we need to add support for nested objects...",
+      "labels": [
+        "INBOX",
+        "Work"
+      ],
+      "hasAttachments": true
+    },
+    {
+      "id": "msg_11234qrs",
+      "threadId": "thread_qrs102",
+      "from": "Legal <legal@techcorp.io>",
+      "subject": "Data processing agreement - signature required",
+      "date": "2026-02-20T14:00:00Z",
+      "snippet": "The updated DPA for EU customers is ready. Please sign via DocuSign by end of week...",
+      "labels": [
+        "INBOX",
+        "IMPORTANT",
+        "Work"
+      ],
+      "hasAttachments": false
+    },
+    {
+      "id": "msg_12345stu",
+      "threadId": "thread_stu103",
+      "from": "Anthropic <notifications@anthropic.com>",
+      "subject": "Claude 3.5 Sonnet now available via API",
+      "date": "2026-02-22T10:00:00Z",
+      "snippet": "Claude 3.5 Sonnet offers improved coding and analysis. New customers get 1000 free tokens...",
+      "labels": [
+        "INBOX",
+        "Promotions"
+      ],
+      "hasAttachments": false
+    },
+    {
+      "id": "msg_13456vwx",
+      "threadId": "thread_vwx104",
+      "from": "Emma Wilson <emma.w@techcorp.io>",
+      "subject": "API documentation published",
+      "date": "2026-02-25T15:00:00Z",
+      "snippet": "The extraction module docs are live at docs.techcorp.io/api. Includes examples for all endpoints...",
+      "labels": [
+        "INBOX",
+        "Work"
+      ],
+      "hasAttachments": false
+    },
+    {
+      "id": "msg_14567yza",
+      "threadId": "thread_yza105",
+      "from": "IT Support <it@techcorp.io>",
+      "subject": "Your laptop warranty expires next month",
+      "date": "2026-02-21T11:30:00Z",
+      "snippet": "Your MacBook Pro warranty expires on March 15. Would you like to schedule a replacement?",
+      "labels": [
+        "INBOX",
+        "Work"
+      ],
+      "hasAttachments": false
+    },
+    {
+      "id": "msg_15678bcd",
+      "threadId": "thread_bcd106",
+      "from": "Stripe <receipts@stripe.com>",
+      "subject": "Receipt for your subscription",
+      "date": "2026-02-19T00:00:00Z",
+      "snippet": "Thank you for your payment. Amount: $99.00. Your Vercel Pro subscription is active...",
+      "labels": [
+        "INBOX",
+        "Finance"
+      ],
+      "hasAttachments": false
+    },
+    {
+      "id": "msg_16789def",
+      "threadId": "thread_def107",
+      "from": "Linear <notifications@linear.app>",
+      "subject": "Issue AI-234 marked as done",
+      "date": "2026-02-24T14:22:00Z",
+      "snippet": "Marcus Vance closed 'Implement streaming for chat endpoint'. Linked PR #145 was merged...",
+      "labels": [
+        "INBOX",
+        "Work"
+      ],
+      "hasAttachments": false
+    },
+    {
+      "id": "msg_17890efg",
+      "threadId": "thread_efg108",
+      "from": "Calendar <calendar@techcorp.io>",
+      "subject": "Reminder: Sprint planning tomorrow 10 AM",
+      "date": "2026-02-24T18:00:00Z",
+      "snippet": "Sprint planning for Sprint 12 is scheduled. Please have your capacity and priorities ready...",
+      "labels": [
+        "INBOX",
+        "Work"
+      ],
+      "hasAttachments": false
+    }
+  ],
+  "resultSizeEstimate": 24,
+  "nextPageToken": "CAE456GHI"
+}
