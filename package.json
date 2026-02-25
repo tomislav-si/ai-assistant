@@ -9,10 +9,19 @@
     "dev": "ts-node src/server.ts",
     "dev:legacy": "ts-node src/index.ts"
   },
-  "keywords": ["express", "typescript", "modular"],
+  "keywords": [
+    "express",
+    "typescript",
+    "modular"
+  ],
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "@opentelemetry/api": "^1.9.0",
+    "@opentelemetry/auto-instrumentations-node": "^0.70.0",
+    "@opentelemetry/sdk-metrics": "^2.5.1",
+    "@opentelemetry/sdk-node": "^0.212.0",
+    "@opentelemetry/sdk-trace-node": "^2.5.1",
     "ai": "^6.0.97",
     "axios": "^1.7.7",
     "express": "^4.21.0",

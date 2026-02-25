@@ -1,3 +1,4 @@
+import "./instrumentation";
 import { createApp } from "./app";
 
 const PORT = process.env.PORT ?? 3000;

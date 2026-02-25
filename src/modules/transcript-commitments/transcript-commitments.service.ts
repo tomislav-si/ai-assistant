@@ -52,6 +52,20 @@ export class TranscriptCommitmentsService {
         name: "TranscriptCommitments",
         description: "List of commitments extracted from meeting transcript",
       }),
+      experimental_telemetry: {
+        isEnabled: true,
+        functionId: "transcript-commitments",
+        // OPT-IN: Set to true to include full prompts in span attributes (ai.prompt.messages).
+        // Useful for debugging but adds large payloads to traces.
+        recordInputs: false,
+        // OPT-IN: Set to true to include full LLM response in span attributes (ai.response.text).
+        // Useful for debugging but adds large payloads to traces.
+        recordOutputs: false,
+        metadata: {
+          module: "transcript-commitments",
+          operation: "getCommitments",
+        },
+      },
     });
 
     return output;

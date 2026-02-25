@@ -60,6 +60,20 @@ export class EmailDigestService {
         name: "EmailDigest",
         description: "Structured email digest with summary, grouped items, and action items",
       }),
+      experimental_telemetry: {
+        isEnabled: true,
+        functionId: "email-digest",
+        // OPT-IN: Set to true to include full prompts in span attributes (ai.prompt.messages).
+        // Useful for debugging but adds large payloads to traces.
+        recordInputs: false,
+        // OPT-IN: Set to true to include full LLM response in span attributes (ai.response.text).
+        // Useful for debugging but adds large payloads to traces.
+        recordOutputs: false,
+        metadata: {
+          module: "email-digest",
+          operation: "getDigest",
+        },
+      },
     });
 
     return output;
