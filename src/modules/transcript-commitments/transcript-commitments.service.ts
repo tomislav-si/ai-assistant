@@ -35,39 +35,59 @@ function loadTranscript(): string {
   return JSON.stringify(data.entries, null, 2);
 }
 
+const REFRESH_INTERVAL_MS = 15 * 60 * 1000; // 15 minutes
+
 export class TranscriptCommitmentsService {
-  async getCommitments(): Promise<TranscriptCommitments> {
-    const content = loadTranscript();
+  private cache: TranscriptCommitments | null = null;
+  private lastFetchAt: Date | null = null;
 
-    const ollama = createOllama({
-      baseURL: `${OLLAMA_BASE_URL}/api`,
-    });
+  private async generateAndCache(): Promise<void> {
+    try {
+      const content = loadTranscript();
 
-    const { output } = await generateText({
-      model: ollama(OLLAMA_MODEL),
-      system: TRANSCRIPT_SYSTEM_PROMPT,
-      prompt: `Process the following transcript and extract all commitments.\n\nContent:\n${content}`,
-      output: Output.object({
-        schema: transcriptCommitmentsSchema,
-        name: "TranscriptCommitments",
-        description: "List of commitments extracted from meeting transcript",
-      }),
-      experimental_telemetry: {
-        isEnabled: true,
-        functionId: "transcript-commitments",
-        // OPT-IN: Set to true to include full prompts in span attributes (ai.prompt.messages).
-        // Useful for debugging but adds large payloads to traces.
-        recordInputs: false,
-        // OPT-IN: Set to true to include full LLM response in span attributes (ai.response.text).
-        // Useful for debugging but adds large payloads to traces.
-        recordOutputs: false,
-        metadata: {
-          module: "transcript-commitments",
-          operation: "getCommitments",
+      const ollama = createOllama({
+        baseURL: `${OLLAMA_BASE_URL}/api`,
+      });
+
+      const { output } = await generateText({
+        model: ollama(OLLAMA_MODEL),
+        system: TRANSCRIPT_SYSTEM_PROMPT,
+        prompt: `Process the following transcript and extract all commitments.\n\nContent:\n${content}`,
+        output: Output.object({
+          schema: transcriptCommitmentsSchema,
+          name: "TranscriptCommitments",
+          description: "List of commitments extracted from meeting transcript",
+        }),
+        experimental_telemetry: {
+          isEnabled: true,
+          functionId: "transcript-commitments",
+          recordInputs: false,
+          recordOutputs: false,
+          metadata: {
+            module: "transcript-commitments",
+            operation: "getCommitments",
+          },
         },
-      },
-    });
+      });
 
-    return output;
+      this.cache = output;
+      this.lastFetchAt = new Date();
+      console.log(`Transcript commitments cached at ${this.lastFetchAt.toISOString()}`);
+    } catch (error) {
+      console.error("Transcript commitments refresh error:", error);
+    }
+  }
+
+  getCachedCommitments(): { commitments: TranscriptCommitments; lastFetchAt: Date } | null {
+    if (this.cache === null || this.lastFetchAt === null) return null;
+    return { commitments: this.cache, lastFetchAt: this.lastFetchAt };
+  }
+
+  startBackgroundRefresh(): void {
+    console.log("Starting transcript commitments background refresh (interval: 15 minutes)");
+    this.generateAndCache();
+    setInterval(() => this.generateAndCache(), REFRESH_INTERVAL_MS);
   }
 }
+
+export const transcriptCommitmentsService = new TranscriptCommitmentsService();

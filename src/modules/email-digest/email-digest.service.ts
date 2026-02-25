@@ -7,6 +7,7 @@ import { z } from "zod";
 const OLLAMA_BASE_URL = "http://localhost:11434";
 const OLLAMA_MODEL = "qwen3:8b";
 
+const REFRESH_INTERVAL_MS = 15 * 60 * 1000; // 15 minutes
 const EMAIL_SYSTEM_PROMPT = `You are an assistant that produces concise email digests. Given a list of emails (with from, subject, date, snippet, labels), extract a structured digest: group by topic or sender if useful, summarize each thread or message in 1–2 sentences, and highlight any urgent or action items.`;
 
 const emailDigestSchema = z.object({
@@ -44,38 +45,56 @@ function loadEmails(): string {
 }
 
 export class EmailDigestService {
-  async getDigest(): Promise<EmailDigest> {
-    const content = loadEmails();
+  private cache: EmailDigest | null = null;
+  private lastFetchAt: Date | null = null;
 
-    const ollama = createOllama({
-      baseURL: `${OLLAMA_BASE_URL}/api`,
-    });
+  private async generateAndCache(): Promise<void> {
+    try {
+      const content = loadEmails();
 
-    const { output } = await generateText({
-      model: ollama(OLLAMA_MODEL),
-      system: EMAIL_SYSTEM_PROMPT,
-      prompt: `Process the following emails and return the structured digest.\n\nContent:\n${content}`,
-      output: Output.object({
-        schema: emailDigestSchema,
-        name: "EmailDigest",
-        description: "Structured email digest with summary, grouped items, and action items",
-      }),
-      experimental_telemetry: {
-        isEnabled: true,
-        functionId: "email-digest",
-        // OPT-IN: Set to true to include full prompts in span attributes (ai.prompt.messages).
-        // Useful for debugging but adds large payloads to traces.
-        recordInputs: false,
-        // OPT-IN: Set to true to include full LLM response in span attributes (ai.response.text).
-        // Useful for debugging but adds large payloads to traces.
-        recordOutputs: false,
-        metadata: {
-          module: "email-digest",
-          operation: "getDigest",
+      const ollama = createOllama({
+        baseURL: `${OLLAMA_BASE_URL}/api`,
+      });
+
+      const { output } = await generateText({
+        model: ollama(OLLAMA_MODEL),
+        system: EMAIL_SYSTEM_PROMPT,
+        prompt: `Process the following emails and return the structured digest.\n\nContent:\n${content}`,
+        output: Output.object({
+          schema: emailDigestSchema,
+          name: "EmailDigest",
+          description: "Structured email digest with summary, grouped items, and action items",
+        }),
+        experimental_telemetry: {
+          isEnabled: true,
+          functionId: "email-digest",
+          recordInputs: false,
+          recordOutputs: false,
+          metadata: {
+            module: "email-digest",
+            operation: "getDigest",
+          },
         },
-      },
-    });
+      });
 
-    return output;
+      this.cache = output;
+      this.lastFetchAt = new Date();
+      console.log(`Email digest cached at ${this.lastFetchAt.toISOString()}`);
+    } catch (error) {
+      console.error("Email digest refresh error:", error);
+    }
+  }
+
+  getCachedDigest(): { digest: EmailDigest; lastFetchAt: Date } | null {
+    if (this.cache === null || this.lastFetchAt === null) return null;
+    return { digest: this.cache, lastFetchAt: this.lastFetchAt };
+  }
+
+  startBackgroundRefresh(): void {
+    console.log("Starting email digest background refresh (interval: 15 minutes)");
+    this.generateAndCache();
+    setInterval(() => this.generateAndCache(), REFRESH_INTERVAL_MS);
   }
 }
+
+export const emailDigestService = new EmailDigestService();

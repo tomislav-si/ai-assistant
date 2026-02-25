@@ -1,17 +1,14 @@
 import { Request, Response } from "express";
-import { EmailDigestService } from "./email-digest.service";
-
-const emailDigestService = new EmailDigestService();
+import { emailDigestService } from "./email-digest.service";
 
 export async function getEmailDigest(_req: Request, res: Response): Promise<void> {
-  try {
-    const digest = await emailDigestService.getDigest();
-    res.json(digest);
-  } catch (error) {
-    console.error("Email digest error:", error);
-    res.status(500).json({
-      error: "Failed to generate email digest",
-      message: error instanceof Error ? error.message : "Unknown error",
+  const cached = emailDigestService.getCachedDigest();
+  if (cached === null) {
+    res.status(503).json({
+      error: "No digest available",
+      message: "Digest has not been generated yet. It will be available shortly after the first background refresh completes.",
     });
+    return;
   }
+  res.json({ ...cached.digest, lastFetchAt: cached.lastFetchAt.toISOString() });
 }

@@ -1,17 +1,15 @@
 import { Request, Response } from "express";
-import { TranscriptCommitmentsService } from "./transcript-commitments.service";
-
-const transcriptCommitmentsService = new TranscriptCommitmentsService();
+import { transcriptCommitmentsService } from "./transcript-commitments.service";
 
 export async function getTranscriptCommitments(_req: Request, res: Response): Promise<void> {
-  try {
-    const commitments = await transcriptCommitmentsService.getCommitments();
-    res.json(commitments);
-  } catch (error) {
-    console.error("Transcript commitments error:", error);
-    res.status(500).json({
-      error: "Failed to extract transcript commitments",
-      message: error instanceof Error ? error.message : "Unknown error",
+  const cached = transcriptCommitmentsService.getCachedCommitments();
+  if (cached === null) {
+    res.status(503).json({
+      error: "No commitments available",
+      message:
+        "Commitments have not been extracted yet. They will be available shortly after the first background refresh completes.",
     });
+    return;
   }
+  res.json({ ...cached.commitments, lastFetchAt: cached.lastFetchAt.toISOString() });
 }
