@@ -6,6 +6,10 @@ import { transcriptCommitmentsService } from "./modules/transcript-commitments/t
 const PORT = process.env.PORT ?? 3000;
 const app = createApp();
 
+/**
+ * Currently unnecessary because data is static. Processing strategy to be determined:
+ * interval-based, event-based, webhook-based, or other.
+ */
 emailDigestService.startBackgroundRefresh();
 transcriptCommitmentsService.startBackgroundRefresh();
 

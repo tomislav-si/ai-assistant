@@ -83,6 +83,11 @@ export class TranscriptCommitmentsService {
     return { commitments: this.cache, lastFetchAt: this.lastFetchAt };
   }
 
+  /**
+   * Currently unnecessary because data is static (mock files).
+   * Processing strategy to be determined: interval-based, event-based,
+   * webhook-based, or other.
+   */
   startBackgroundRefresh(): void {
     console.log("Starting transcript commitments background refresh (interval: 15 minutes)");
     this.generateAndCache();
