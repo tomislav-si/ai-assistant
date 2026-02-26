@@ -5,13 +5,7 @@ import { MemoryVectorStore } from "@langchain/classic/vectorstores/memory";
 import { OllamaEmbeddings } from "@langchain/ollama";
 import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
 
-const OLLAMA_EMBEDDING_MODEL = "bge-m3:latest";
-const CHUNK_SIZE = 1000;
-const CHUNK_OVERLAP = 200;
-
-const TRANSCRIPTS_DIR = path.resolve(process.cwd(), "src", "mock-data", "transcripts");
-const TRANSCRIPT_FULL = "meeting-transcript.json";
-const TRANSCRIPT_SMALL = "meeting-transcript-small.json";
+import { config } from "../../../config";
 
 /**
  * Loads transcript JSON files and splits them into document chunks.
@@ -23,13 +17,13 @@ const TRANSCRIPT_SMALL = "meeting-transcript-small.json";
 export async function loadTranscriptDocuments(): Promise<Document[]> {
   const useSample = process.env.USE_SMALL_TRANSCRIPT_EXAMPLE === "true";
   console.log(`Using ${useSample ? "small" : "full"} transcript example`);
-  const filename = useSample ? TRANSCRIPT_SMALL : TRANSCRIPT_FULL;
-  const filePath = path.join(TRANSCRIPTS_DIR, filename);
+  const filename = useSample ? config.TRANSCRIPT_SMALL : config.TRANSCRIPT_FULL;
+  const filePath = path.join(config.TRANSCRIPTS_DIR, filename);
   const loader = new JSONLoader(filePath);
   const rawDocuments = await loader.load();
   const splitter = new RecursiveCharacterTextSplitter({
-    chunkSize: CHUNK_SIZE,
-    chunkOverlap: CHUNK_OVERLAP,
+    chunkSize: config.CHUNK_SIZE,
+    chunkOverlap: config.CHUNK_OVERLAP,
   });
   return splitter.splitDocuments(rawDocuments);
 }
@@ -45,7 +39,7 @@ export async function ingestTranscripts(): Promise<MemoryVectorStore> {
   const documents = await loadTranscriptDocuments();
 
   const embeddings = new OllamaEmbeddings({
-    model: OLLAMA_EMBEDDING_MODEL,
+    model: config.OLLAMA_EMBEDDING_MODEL,
   });
 
   const vectorStore = await MemoryVectorStore.fromDocuments(

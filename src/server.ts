@@ -1,5 +1,7 @@
+import "dotenv/config";
 import "./instrumentation";
 import { createApp } from "./app";
+import { logSampleVectorStoreEntry } from "./db/in-memory/vector-store-utils";
 import { emailDigestService } from "./modules/email-digest/email-digest.service";
 import { transcriptCommitmentsService } from "./modules/transcript-commitments/transcript-commitments.service";
 import { ingestTranscripts } from "./modules/ingest-data";
@@ -21,14 +23,6 @@ async function bootstrap(): Promise<void> {
   // emailDigestService.startBackgroundRefresh();
   transcriptCommitmentsService.startBackgroundRefresh(vectorStore);
 
-  // Test the transcript ingestion
-  // const [sample] = await vectorStore.similaritySearch("meeting", 1);
-  // if (sample) {
-  //   console.log("[Transcript ingestion] Sample entry:", {
-  //     pageContent: sample.pageContent.slice(0, 150) + "...",
-  //     metadata: sample.metadata,
-  //   });
-  // }
 
   app.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}`);

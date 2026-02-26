@@ -6,14 +6,12 @@ import type { Document } from "@langchain/core/documents";
 
 import type { MemoryVectorStore } from "@langchain/classic/vectorstores/memory";
 
+import { langChainLLMTimingCallback } from "../../observability/langchain-llm-timing-callback";
 import { transcriptCommitmentsSchema, type TranscriptCommitments } from "./types";
 import { loadTranscript } from "./utils";
 import { BASIC_COMMITMENT_EXTRACTION, MR_TRANSCRIPT_CHUNK, MR_TRANSCRIPT_SUMMARY } from "./prompts";
 import { getDocumentsFromVectorStore } from "../../db/in-memory/vector-store-utils";
-
-const OLLAMA_BASE_URL = "http://localhost:11434";
-const OLLAMA_MODEL = "qwen3:8b";
-const REFRESH_INTERVAL_MS = 15 * 60 * 1000; // 15 minutes
+import { config } from "../../config";
 
 export class TranscriptCommitmentsService {
   private basicCache: TranscriptCommitments | null = null;
@@ -34,11 +32,11 @@ export class TranscriptCommitmentsService {
       const content = loadTranscript();
 
       const ollama = createOllama({
-        baseURL: `${OLLAMA_BASE_URL}/api`,
+        baseURL: `${config.OLLAMA_BASE_URL}/api`,
       });
 
       const { output } = await generateText({
-        model: ollama(OLLAMA_MODEL),
+        model: ollama(config.OLLAMA_MODEL),
         system: BASIC_COMMITMENT_EXTRACTION,
         prompt: `Process the following transcript and extract all commitments.\n\nContent:\n${content}`,
         output: Output.object({
@@ -102,7 +100,7 @@ export class TranscriptCommitmentsService {
    */
   async extractCommitments(docs: Document[]): Promise<string> {
     const llm = new ChatOllama({
-      model: OLLAMA_MODEL,
+      model: config.OLLAMA_MODEL,
       temperature: 0,
     });
 
@@ -112,9 +110,10 @@ export class TranscriptCommitmentsService {
       combinePrompt: MR_TRANSCRIPT_SUMMARY,
     });
 
-    const result = await chain.invoke({
-      input_documents: docs,
-    });
+    const result = await chain.invoke(
+      { input_documents: docs },
+      { callbacks: [langChainLLMTimingCallback] }
+    );
 
     return (result?.text as string) ?? "No commitments could be extracted.";
   }
@@ -141,13 +140,13 @@ export class TranscriptCommitmentsService {
     if (vectorStore) {
       this.setVectorStore(vectorStore);
     }
-    console.log("Starting transcript commitments background refresh (interval: 15 minutes)");
+    console.log(`Starting transcript commitments background refresh (interval: ${config.TRANSCRIPT_REFRESH_INTERVAL_MS / 60_000} minutes)`);
     // this.generateBasicTranscriptCommitmentsAndCache();
     this.generateMapReduceTranscriptCommitmentsAndCache();
     setInterval(() => {
       // this.generateBasicTranscriptCommitmentsAndCache();
       this.generateMapReduceTranscriptCommitmentsAndCache();
-    }, REFRESH_INTERVAL_MS);
+    }, config.TRANSCRIPT_REFRESH_INTERVAL_MS);
   }
 }
 

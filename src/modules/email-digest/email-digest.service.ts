@@ -4,10 +4,8 @@ import { createOllama } from "ollama-ai-provider-v2";
 import { generateText, Output } from "ai";
 import { z } from "zod";
 
-const OLLAMA_BASE_URL = "http://localhost:11434";
-const OLLAMA_MODEL = "qwen3:8b";
+import { config } from "../../config";
 
-const REFRESH_INTERVAL_MS = 15 * 60 * 1000; // 15 minutes
 const EMAIL_SYSTEM_PROMPT = `You are an assistant that produces concise email digests. Given a list of emails (with from, subject, date, snippet, labels), extract a structured digest: group by topic or sender if useful, summarize each thread or message in 1–2 sentences, and highlight any urgent or action items.`;
 
 const emailDigestSchema = z.object({
@@ -53,11 +51,11 @@ export class EmailDigestService {
       const content = loadEmails();
 
       const ollama = createOllama({
-        baseURL: `${OLLAMA_BASE_URL}/api`,
+        baseURL: `${config.OLLAMA_BASE_URL}/api`,
       });
 
       const { output } = await generateText({
-        model: ollama(OLLAMA_MODEL),
+        model: ollama(config.OLLAMA_MODEL),
         system: EMAIL_SYSTEM_PROMPT,
         prompt: `Process the following emails and return the structured digest.\n\nContent:\n${content}`,
         output: Output.object({
@@ -96,9 +94,9 @@ export class EmailDigestService {
    * webhook-based, or other.
    */
   startBackgroundRefresh(): void {
-    console.log("Starting email digest background refresh (interval: 15 minutes)");
+    console.log(`Starting email digest background refresh (interval: ${config.EMAIL_REFRESH_INTERVAL_MS}ms)`);
     this.generateAndCache();
-    setInterval(() => this.generateAndCache(), REFRESH_INTERVAL_MS);
+    setInterval(() => this.generateAndCache(), config.EMAIL_REFRESH_INTERVAL_MS);
   }
 }
 
