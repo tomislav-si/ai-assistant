@@ -23,9 +23,9 @@ export type Commitment = z.infer<typeof transcriptCommitmentsSchema>["commitment
 export type TranscriptCommitments = z.infer<typeof transcriptCommitmentsSchema>;
 
 function getMockDataPath(): string {
-  const fromCwd = path.join(process.cwd(), "src", "mock-data", "meeting-transcript.json");
+  const fromCwd = path.join(process.cwd(), "src", "mock-data", "transcripts", "meeting-transcript.json");
   if (fs.existsSync(fromCwd)) return fromCwd;
-  return path.join(process.cwd(), "mock-data", "meeting-transcript.json");
+  return path.join(process.cwd(), "mock-data", "transcripts", "meeting-transcript.json");
 }
 
 function loadTranscript(): string {

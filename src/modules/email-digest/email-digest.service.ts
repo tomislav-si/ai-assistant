@@ -32,9 +32,9 @@ export type DigestGroup = z.infer<typeof emailDigestSchema>["groups"][number];
 export type EmailDigest = z.infer<typeof emailDigestSchema>;
 
 function getMockDataPath(): string {
-  const fromCwd = path.join(process.cwd(), "src", "mock-data", "gmail-mock-data.json");
+  const fromCwd = path.join(process.cwd(), "src", "mock-data", "emails", "gmail-mock-data.json");
   if (fs.existsSync(fromCwd)) return fromCwd;
-  return path.join(process.cwd(), "mock-data", "gmail-mock-data.json");
+  return path.join(process.cwd(), "mock-data", "emails", "gmail-mock-data.json");
 }
 
 function loadEmails(): string {
