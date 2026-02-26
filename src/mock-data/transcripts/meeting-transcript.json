@@ -1,1 +1,300 @@
-{"conferenceRecord":"conferenceRecords/meet-xyz-pdq","transcript":"transcripts/transcript_998877","entries":[{"participant":"participants/p1_sarah_chen","name":"Sarah Chen","text":"Alright everyone, thanks for joining. Today we're looking at the Vercel AI SDK integration with our local Ollama setup.","startTime":"2026-02-24T15:00:05.123Z","endTime":"2026-02-24T15:00:12.450Z"},{"participant":"participants/p2_marcus_vance","name":"Marcus Vance","text":"I've been testing the `streamText` function. It works great, but I'm worried about the latency on the local Llama 3.2 model when running on the dev laptops.","startTime":"2026-02-24T15:00:13.100Z","endTime":"2026-02-24T15:00:20.300Z"},{"participant":"participants/p1_sarah_chen","name":"Sarah Chen","text":"That's a fair point. We might need to look into quantization or just sticking to smaller 1B or 3B parameter models for the local dev environment.","startTime":"2026-02-24T15:00:21.050Z","endTime":"2026-02-24T15:00:28.900Z"},{"participant":"participants/p3_jenny_kim","name":"Jenny Kim","text":"I'll take an action item to benchmark the 3B model vs the 8B today and report back on Slack by 5 PM.","startTime":"2026-02-24T15:00:29.500Z","endTime":"2026-02-24T15:00:34.200Z"},{"participant":"participants/p2_marcus_vance","name":"Marcus Vance","text":"Also, regarding the UI, are we using the `useChat` hook or building a custom state manager?","startTime":"2026-02-24T15:00:35.000Z","endTime":"2026-02-24T15:00:41.100Z"},{"participant":"participants/p1_sarah_chen","name":"Sarah Chen","text":"The SDK's `useChat` hook is robust. Let's not reinvent the wheel. Marcus, can you have the prototype UI ready for the demo this Friday?","startTime":"2026-02-24T15:00:42.500Z","endTime":"2026-02-24T15:00:49.000Z"},{"participant":"participants/p2_marcus_vance","name":"Marcus Vance","text":"Friday? Yeah, I can commit to that. I'll push the branch by noon on Friday so you can review it before the meeting.","startTime":"2026-02-24T15:00:50.100Z","endTime":"2026-02-24T15:00:55.300Z"},{"participant":"participants/p4_david_ross","name":"David Ross","text":"Wait, I need the final JSON schema for the data extraction module before Marcus finishes. Jenny, when will the model benchmarks be done?","startTime":"2026-02-24T15:00:56.200Z","endTime":"2026-02-24T15:01:02.800Z"},{"participant":"participants/p3_jenny_kim","name":"Jenny Kim","text":"Like I said, I'll have the data by 5 PM today. David, I'll send you the Zod schema definitions first thing tomorrow morning, say 9 AM?","startTime":"2026-02-24T15:01:03.500Z","endTime":"2026-02-24T15:01:09.900Z"},{"participant":"participants/p4_david_ross","name":"David Ross","text":"9 AM works. That gives me enough time to integrate the structured output logic. I'll have the full extraction service completed by Monday morning.","startTime":"2026-02-24T15:01:10.500Z","endTime":"2026-02-24T15:01:18.200Z"},{"participant":"participants/p1_sarah_chen","name":"Sarah Chen","text":"Great. One more thing—the security team flagged the local Ollama API endpoint. They want a basic auth proxy in front of it.","startTime":"2026-02-24T15:01:19.000Z","endTime":"2026-02-24T15:01:25.400Z"},{"participant":"participants/p2_marcus_vance","name":"Marcus Vance","text":"I can handle the proxy setup. It's a quick Nginx config. I'll do that right after this call and it should be live in 30 minutes.","startTime":"2026-02-24T15:01:26.100Z","endTime":"2026-02-24T15:01:31.500Z"},{"participant":"participants/p3_jenny_kim","name":"Jenny Kim","text":"Oh, Sarah, I almost forgot. I need you to approve the budget increase for the Vercel Pro plan. We're hitting the limit on concurrent edge functions.","startTime":"2026-02-24T15:01:32.200Z","endTime":"2026-02-24T15:01:38.800Z"},{"participant":"participants/p1_sarah_chen","name":"Sarah Chen","text":"I'll look into the billing dashboard. If it looks reasonable, I'll hit approve by the end of the day.","startTime":"2026-02-24T15:01:39.500Z","endTime":"2026-02-24T15:01:44.200Z"},{"participant":"participants/p4_david_ross","name":"David Ross","text":"Wait, before we drop, does the 3B model handle the multi-turn conversation history correctly? If not, Monday's deadline might slip.","startTime":"2026-02-24T15:01:45.000Z","endTime":"2026-02-24T15:01:52.300Z"},{"participant":"participants/p3_jenny_kim","name":"Jenny Kim","text":"Good catch. I'll include a multi-turn stress test in my 5 PM report today to confirm.","startTime":"2026-02-24T15:01:53.000Z","endTime":"2026-02-24T15:01:57.800Z"},{"participant":"participants/p1_sarah_chen","name":"Sarah Chen","text":"Excellent. Thanks everyone. Let's touch base on Slack if anything changes.","startTime":"2026-02-24T15:01:58.500Z","endTime":"2026-02-24T15:02:02.000Z"},{"participant":"participants/p1_sarah_chen","name":"Sarah Chen","text":"Actually, one more thing before we go. The design team sent over new Figma mockups. Can someone review them by end of day tomorrow?","startTime":"2026-02-24T15:02:03.000Z","endTime":"2026-02-24T15:02:10.500Z"},{"participant":"participants/p2_marcus_vance","name":"Marcus Vance","text":"I'll take a look. I'll add feedback in the Figma comments by Wednesday evening.","startTime":"2026-02-24T15:02:11.200Z","endTime":"2026-02-24T15:02:16.800Z"},{"participant":"participants/p5_emma_wilson","name":"Emma Wilson","text":"Hi everyone, sorry I'm late. I just joined. Sarah, I'll have the documentation for the new API endpoints ready by Thursday afternoon.","startTime":"2026-02-24T15:02:17.500Z","endTime":"2026-02-24T15:02:25.200Z"},{"participant":"participants/p1_sarah_chen","name":"Sarah Chen","text":"Thanks Emma. That's perfect. David, can you coordinate with Emma on the schema docs for the extraction module?","startTime":"2026-02-24T15:02:26.000Z","endTime":"2026-02-24T15:02:32.100Z"},{"participant":"participants/p4_david_ross","name":"David Ross","text":"Sure. Emma, I'll send you a draft of the schema by end of day tomorrow. You can merge it into the docs.","startTime":"2026-02-24T15:02:32.800Z","endTime":"2026-02-24T15:02:39.500Z"},{"participant":"participants/p5_emma_wilson","name":"Emma Wilson","text":"Sounds good. I'll have the full API docs published by Thursday 3 PM.","startTime":"2026-02-24T15:02:40.200Z","endTime":"2026-02-24T15:02:45.800Z"},{"participant":"participants/p3_jenny_kim","name":"Jenny Kim","text":"One more thing—I need to schedule the load testing for next week. Sarah, can you approve the staging environment access for the QA team by Friday?","startTime":"2026-02-24T15:02:46.500Z","endTime":"2026-02-24T15:02:54.800Z"},{"participant":"participants/p1_sarah_chen","name":"Sarah Chen","text":"I'll put in the access request today. It should be approved by Friday morning.","startTime":"2026-02-24T15:02:55.500Z","endTime":"2026-02-24T15:03:03.000Z"},{"participant":"participants/p2_marcus_vance","name":"Marcus Vance","text":"Alright, I think we're good. I'll summarize the action items in Slack and tag everyone. Have a great afternoon.","startTime":"2026-02-24T15:03:03.700Z","endTime":"2026-02-24T15:03:10.200Z"},{"participant":"participants/p1_sarah_chen","name":"Sarah Chen","text":"Quick follow-up call. The deployment fix worked. Let's discuss the error monitoring setup for production.","startTime":"2026-02-25T10:00:05.000Z","endTime":"2026-02-25T10:00:12.000Z"},{"participant":"participants/p6_tom_harris","name":"Tom Harris","text":"I'll set up Sentry for the Express app. I'll have the error tracking configured by end of day today.","startTime":"2026-02-25T10:00:13.000Z","endTime":"2026-02-25T10:00:20.000Z"},{"participant":"participants/p1_sarah_chen","name":"Sarah Chen","text":"Perfect. And we need log aggregation. Who can own that?","startTime":"2026-02-25T10:00:21.000Z","endTime":"2026-02-25T10:00:27.000Z"},{"participant":"participants/p2_marcus_vance","name":"Marcus Vance","text":"I'll look into Datadog or CloudWatch. I'll have a proposal ready for the sprint planning tomorrow.","startTime":"2026-02-25T10:00:28.000Z","endTime":"2026-02-25T10:00:36.000Z"},{"participant":"participants/p4_david_ross","name":"David Ross","text":"The extraction service is done. I've pushed to staging. Can someone run a smoke test before we merge to main?","startTime":"2026-02-25T10:00:37.000Z","endTime":"2026-02-25T10:00:45.000Z"},{"participant":"participants/p3_jenny_kim","name":"Jenny Kim","text":"I'll run the smoke tests this afternoon. I'll report back in Slack by 4 PM.","startTime":"2026-02-25T10:00:46.000Z","endTime":"2026-02-25T10:00:52.000Z"},{"participant":"participants/p5_emma_wilson","name":"Emma Wilson","text":"The API docs are live. I've added a changelog section. I'll update it weekly every Monday morning.","startTime":"2026-02-25T10:00:53.000Z","endTime":"2026-02-25T10:01:00.000Z"},{"participant":"participants/p1_sarah_chen","name":"Sarah Chen","text":"Great. One more—the legal team needs the DPA signed. I'll get that done by Friday. Can someone from engineering review the data retention section?","startTime":"2026-02-25T10:01:01.000Z","endTime":"2026-02-25T10:01:10.000Z"},{"participant":"participants/p4_david_ross","name":"David Ross","text":"I'll review the DPA. I'll send feedback to legal by Thursday EOD.","startTime":"2026-02-25T10:01:11.000Z","endTime":"2026-02-25T10:01:18.000Z"},{"participant":"participants/p2_marcus_vance","name":"Marcus Vance","text":"The Nginx proxy is live. I've documented the config in the runbook. I'll share the link in Slack after this call.","startTime":"2026-02-25T10:01:19.000Z","endTime":"2026-02-25T10:01:26.000Z"},{"participant":"participants/p3_jenny_kim","name":"Jenny Kim","text":"Staging access was approved. QA can start load testing next Monday. I'll coordinate the schedule with them by tomorrow.","startTime":"2026-02-25T10:01:27.000Z","endTime":"2026-02-25T10:01:35.000Z"},{"participant":"participants/p6_tom_harris","name":"Tom Harris","text":"I need the production database credentials for the monitoring setup. Sarah, can you approve the 1Password access request by noon?","startTime":"2026-02-25T10:01:36.000Z","endTime":"2026-02-25T10:01:44.000Z"},{"participant":"participants/p1_sarah_chen","name":"Sarah Chen","text":"I'll approve it right after this call. Should be done in 10 minutes.","startTime":"2026-02-25T10:01:45.000Z","endTime":"2026-02-25T10:01:51.000Z"},{"participant":"participants/p5_emma_wilson","name":"Emma Wilson","text":"I'll create a runbook for the new API. I'll have a draft ready for review by Wednesday.","startTime":"2026-02-25T10:01:52.000Z","endTime":"2026-02-25T10:01:59.000Z"},{"participant":"participants/p1_sarah_chen","name":"Sarah Chen","text":"Perfect. Let's wrap up. Tom, please add the Sentry dashboard to our status page. Everyone else, see you at sprint planning.","startTime":"2026-02-25T10:02:00.000Z","endTime":"2026-02-25T10:02:08.000Z"},{"participant":"participants/p6_tom_harris","name":"Tom Harris","text":"Will do. I'll have it linked by end of day.","startTime":"2026-02-25T10:02:09.000Z","endTime":"2026-02-25T10:02:14.000Z"}]}
+{
+    "conferenceRecord": "conferenceRecords/meet-xyz-pdq",
+    "transcript": "transcripts/transcript_998877",
+    "entries": [
+        {
+            "participant": "participants/p1_sarah_chen",
+            "name": "Sarah Chen",
+            "text": "Alright everyone, thanks for joining. Today we're looking at the Vercel AI SDK integration with our local Ollama setup.",
+            "startTime": "2026-02-24T15:00:05.123Z",
+            "endTime": "2026-02-24T15:00:12.450Z"
+        },
+        {
+            "participant": "participants/p2_marcus_vance",
+            "name": "Marcus Vance",
+            "text": "I've been testing the `streamText` function. It works great, but I'm worried about the latency on the local Llama 3.2 model when running on the dev laptops.",
+            "startTime": "2026-02-24T15:00:13.100Z",
+            "endTime": "2026-02-24T15:00:20.300Z"
+        },
+        {
+            "participant": "participants/p1_sarah_chen",
+            "name": "Sarah Chen",
+            "text": "That's a fair point. We might need to look into quantization or just sticking to smaller 1B or 3B parameter models for the local dev environment.",
+            "startTime": "2026-02-24T15:00:21.050Z",
+            "endTime": "2026-02-24T15:00:28.900Z"
+        },
+        {
+            "participant": "participants/p3_jenny_kim",
+            "name": "Jenny Kim",
+            "text": "I'll take an action item to benchmark the 3B model vs the 8B today and report back on Slack by 5 PM.",
+            "startTime": "2026-02-24T15:00:29.500Z",
+            "endTime": "2026-02-24T15:00:34.200Z"
+        },
+        {
+            "participant": "participants/p2_marcus_vance",
+            "name": "Marcus Vance",
+            "text": "Also, regarding the UI, are we using the `useChat` hook or building a custom state manager?",
+            "startTime": "2026-02-24T15:00:35.000Z",
+            "endTime": "2026-02-24T15:00:41.100Z"
+        },
+        {
+            "participant": "participants/p1_sarah_chen",
+            "name": "Sarah Chen",
+            "text": "The SDK's `useChat` hook is robust. Let's not reinvent the wheel. Marcus, can you have the prototype UI ready for the demo this Friday?",
+            "startTime": "2026-02-24T15:00:42.500Z",
+            "endTime": "2026-02-24T15:00:49.000Z"
+        },
+        {
+            "participant": "participants/p2_marcus_vance",
+            "name": "Marcus Vance",
+            "text": "Friday? Yeah, I can commit to that. I'll push the branch by noon on Friday so you can review it before the meeting.",
+            "startTime": "2026-02-24T15:00:50.100Z",
+            "endTime": "2026-02-24T15:00:55.300Z"
+        },
+        {
+            "participant": "participants/p4_david_ross",
+            "name": "David Ross",
+            "text": "Wait, I need the final JSON schema for the data extraction module before Marcus finishes. Jenny, when will the model benchmarks be done?",
+            "startTime": "2026-02-24T15:00:56.200Z",
+            "endTime": "2026-02-24T15:01:02.800Z"
+        },
+        {
+            "participant": "participants/p3_jenny_kim",
+            "name": "Jenny Kim",
+            "text": "Like I said, I'll have the data by 5 PM today. David, I'll send you the Zod schema definitions first thing tomorrow morning, say 9 AM?",
+            "startTime": "2026-02-24T15:01:03.500Z",
+            "endTime": "2026-02-24T15:01:09.900Z"
+        },
+        {
+            "participant": "participants/p4_david_ross",
+            "name": "David Ross",
+            "text": "9 AM works. That gives me enough time to integrate the structured output logic. I'll have the full extraction service completed by Monday morning.",
+            "startTime": "2026-02-24T15:01:10.500Z",
+            "endTime": "2026-02-24T15:01:18.200Z"
+        },
+        {
+            "participant": "participants/p1_sarah_chen",
+            "name": "Sarah Chen",
+            "text": "Great. One more thing—the security team flagged the local Ollama API endpoint. They want a basic auth proxy in front of it.",
+            "startTime": "2026-02-24T15:01:19.000Z",
+            "endTime": "2026-02-24T15:01:25.400Z"
+        },
+        {
+            "participant": "participants/p2_marcus_vance",
+            "name": "Marcus Vance",
+            "text": "I can handle the proxy setup. It's a quick Nginx config. I'll do that right after this call and it should be live in 30 minutes.",
+            "startTime": "2026-02-24T15:01:26.100Z",
+            "endTime": "2026-02-24T15:01:31.500Z"
+        },
+        {
+            "participant": "participants/p3_jenny_kim",
+            "name": "Jenny Kim",
+            "text": "Oh, Sarah, I almost forgot. I need you to approve the budget increase for the Vercel Pro plan. We're hitting the limit on concurrent edge functions.",
+            "startTime": "2026-02-24T15:01:32.200Z",
+            "endTime": "2026-02-24T15:01:38.800Z"
+        },
+        {
+            "participant": "participants/p1_sarah_chen",
+            "name": "Sarah Chen",
+            "text": "I'll look into the billing dashboard. If it looks reasonable, I'll hit approve by the end of the day.",
+            "startTime": "2026-02-24T15:01:39.500Z",
+            "endTime": "2026-02-24T15:01:44.200Z"
+        },
+        {
+            "participant": "participants/p4_david_ross",
+            "name": "David Ross",
+            "text": "Wait, before we drop, does the 3B model handle the multi-turn conversation history correctly? If not, Monday's deadline might slip.",
+            "startTime": "2026-02-24T15:01:45.000Z",
+            "endTime": "2026-02-24T15:01:52.300Z"
+        },
+        {
+            "participant": "participants/p3_jenny_kim",
+            "name": "Jenny Kim",
+            "text": "Good catch. I'll include a multi-turn stress test in my 5 PM report today to confirm.",
+            "startTime": "2026-02-24T15:01:53.000Z",
+            "endTime": "2026-02-24T15:01:57.800Z"
+        },
+        {
+            "participant": "participants/p1_sarah_chen",
+            "name": "Sarah Chen",
+            "text": "Excellent. Thanks everyone. Let's touch base on Slack if anything changes.",
+            "startTime": "2026-02-24T15:01:58.500Z",
+            "endTime": "2026-02-24T15:02:02.000Z"
+        },
+        {
+            "participant": "participants/p1_sarah_chen",
+            "name": "Sarah Chen",
+            "text": "Actually, one more thing before we go. The design team sent over new Figma mockups. Can someone review them by end of day tomorrow?",
+            "startTime": "2026-02-24T15:02:03.000Z",
+            "endTime": "2026-02-24T15:02:10.500Z"
+        },
+        {
+            "participant": "participants/p2_marcus_vance",
+            "name": "Marcus Vance",
+            "text": "I'll take a look. I'll add feedback in the Figma comments by Wednesday evening.",
+            "startTime": "2026-02-24T15:02:11.200Z",
+            "endTime": "2026-02-24T15:02:16.800Z"
+        },
+        {
+            "participant": "participants/p5_emma_wilson",
+            "name": "Emma Wilson",
+            "text": "Hi everyone, sorry I'm late. I just joined. Sarah, I'll have the documentation for the new API endpoints ready by Thursday afternoon.",
+            "startTime": "2026-02-24T15:02:17.500Z",
+            "endTime": "2026-02-24T15:02:25.200Z"
+        },
+        {
+            "participant": "participants/p1_sarah_chen",
+            "name": "Sarah Chen",
+            "text": "Thanks Emma. That's perfect. David, can you coordinate with Emma on the schema docs for the extraction module?",
+            "startTime": "2026-02-24T15:02:26.000Z",
+            "endTime": "2026-02-24T15:02:32.100Z"
+        },
+        {
+            "participant": "participants/p4_david_ross",
+            "name": "David Ross",
+            "text": "Sure. Emma, I'll send you a draft of the schema by end of day tomorrow. You can merge it into the docs.",
+            "startTime": "2026-02-24T15:02:32.800Z",
+            "endTime": "2026-02-24T15:02:39.500Z"
+        },
+        {
+            "participant": "participants/p5_emma_wilson",
+            "name": "Emma Wilson",
+            "text": "Sounds good. I'll have the full API docs published by Thursday 3 PM.",
+            "startTime": "2026-02-24T15:02:40.200Z",
+            "endTime": "2026-02-24T15:02:45.800Z"
+        },
+        {
+            "participant": "participants/p3_jenny_kim",
+            "name": "Jenny Kim",
+            "text": "One more thing—I need to schedule the load testing for next week. Sarah, can you approve the staging environment access for the QA team by Friday?",
+            "startTime": "2026-02-24T15:02:46.500Z",
+            "endTime": "2026-02-24T15:02:54.800Z"
+        },
+        {
+            "participant": "participants/p1_sarah_chen",
+            "name": "Sarah Chen",
+            "text": "I'll put in the access request today. It should be approved by Friday morning.",
+            "startTime": "2026-02-24T15:02:55.500Z",
+            "endTime": "2026-02-24T15:03:03.000Z"
+        },
+        {
+            "participant": "participants/p2_marcus_vance",
+            "name": "Marcus Vance",
+            "text": "Alright, I think we're good. I'll summarize the action items in Slack and tag everyone. Have a great afternoon.",
+            "startTime": "2026-02-24T15:03:03.700Z",
+            "endTime": "2026-02-24T15:03:10.200Z"
+        },
+        {
+            "participant": "participants/p1_sarah_chen",
+            "name": "Sarah Chen",
+            "text": "Quick follow-up call. The deployment fix worked. Let's discuss the error monitoring setup for production.",
+            "startTime": "2026-02-25T10:00:05.000Z",
+            "endTime": "2026-02-25T10:00:12.000Z"
+        },
+        {
+            "participant": "participants/p6_tom_harris",
+            "name": "Tom Harris",
+            "text": "I'll set up Sentry for the Express app. I'll have the error tracking configured by end of day today.",
+            "startTime": "2026-02-25T10:00:13.000Z",
+            "endTime": "2026-02-25T10:00:20.000Z"
+        },
+        {
+            "participant": "participants/p1_sarah_chen",
+            "name": "Sarah Chen",
+            "text": "Perfect. And we need log aggregation. Who can own that?",
+            "startTime": "2026-02-25T10:00:21.000Z",
+            "endTime": "2026-02-25T10:00:27.000Z"
+        },
+        {
+            "participant": "participants/p2_marcus_vance",
+            "name": "Marcus Vance",
+            "text": "I'll look into Datadog or CloudWatch. I'll have a proposal ready for the sprint planning tomorrow.",
+            "startTime": "2026-02-25T10:00:28.000Z",
+            "endTime": "2026-02-25T10:00:36.000Z"
+        },
+        {
+            "participant": "participants/p4_david_ross",
+            "name": "David Ross",
+            "text": "The extraction service is done. I've pushed to staging. Can someone run a smoke test before we merge to main?",
+            "startTime": "2026-02-25T10:00:37.000Z",
+            "endTime": "2026-02-25T10:00:45.000Z"
+        },
+        {
+            "participant": "participants/p3_jenny_kim",
+            "name": "Jenny Kim",
+            "text": "I'll run the smoke tests this afternoon. I'll report back in Slack by 4 PM.",
+            "startTime": "2026-02-25T10:00:46.000Z",
+            "endTime": "2026-02-25T10:00:52.000Z"
+        },
+        {
+            "participant": "participants/p5_emma_wilson",
+            "name": "Emma Wilson",
+            "text": "The API docs are live. I've added a changelog section. I'll update it weekly every Monday morning.",
+            "startTime": "2026-02-25T10:00:53.000Z",
+            "endTime": "2026-02-25T10:01:00.000Z"
+        },
+        {
+            "participant": "participants/p1_sarah_chen",
+            "name": "Sarah Chen",
+            "text": "Great. One more—the legal team needs the DPA signed. I'll get that done by Friday. Can someone from engineering review the data retention section?",
+            "startTime": "2026-02-25T10:01:01.000Z",
+            "endTime": "2026-02-25T10:01:10.000Z"
+        },
+        {
+            "participant": "participants/p4_david_ross",
+            "name": "David Ross",
+            "text": "I'll review the DPA. I'll send feedback to legal by Thursday EOD.",
+            "startTime": "2026-02-25T10:01:11.000Z",
+            "endTime": "2026-02-25T10:01:18.000Z"
+        },
+        {
+            "participant": "participants/p2_marcus_vance",
+            "name": "Marcus Vance",
+            "text": "The Nginx proxy is live. I've documented the config in the runbook. I'll share the link in Slack after this call.",
+            "startTime": "2026-02-25T10:01:19.000Z",
+            "endTime": "2026-02-25T10:01:26.000Z"
+        },
+        {
+            "participant": "participants/p3_jenny_kim",
+            "name": "Jenny Kim",
+            "text": "Staging access was approved. QA can start load testing next Monday. I'll coordinate the schedule with them by tomorrow.",
+            "startTime": "2026-02-25T10:01:27.000Z",
+            "endTime": "2026-02-25T10:01:35.000Z"
+        },
+        {
+            "participant": "participants/p6_tom_harris",
+            "name": "Tom Harris",
+            "text": "I need the production database credentials for the monitoring setup. Sarah, can you approve the 1Password access request by noon?",
+            "startTime": "2026-02-25T10:01:36.000Z",
+            "endTime": "2026-02-25T10:01:44.000Z"
+        },
+        {
+            "participant": "participants/p1_sarah_chen",
+            "name": "Sarah Chen",
+            "text": "I'll approve it right after this call. Should be done in 10 minutes.",
+            "startTime": "2026-02-25T10:01:45.000Z",
+            "endTime": "2026-02-25T10:01:51.000Z"
+        },
+        {
+            "participant": "participants/p5_emma_wilson",
+            "name": "Emma Wilson",
+            "text": "I'll create a runbook for the new API. I'll have a draft ready for review by Wednesday.",
+            "startTime": "2026-02-25T10:01:52.000Z",
+            "endTime": "2026-02-25T10:01:59.000Z"
+        },
+        {
+            "participant": "participants/p1_sarah_chen",
+            "name": "Sarah Chen",
+            "text": "Perfect. Let's wrap up. Tom, please add the Sentry dashboard to our status page. Everyone else, see you at sprint planning.",
+            "startTime": "2026-02-25T10:02:00.000Z",
+            "endTime": "2026-02-25T10:02:08.000Z"
+        },
+        {
+            "participant": "participants/p6_tom_harris",
+            "name": "Tom Harris",
+            "text": "Will do. I'll have it linked by end of day.",
+            "startTime": "2026-02-25T10:02:09.000Z",
+            "endTime": "2026-02-25T10:02:14.000Z"
+        }
+    ]
+}

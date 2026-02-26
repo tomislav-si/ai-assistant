@@ -1,0 +1,20 @@
+{
+  "conferenceRecord": "conferenceRecords/meet-sample",
+  "transcript": "transcripts/transcript_sample",
+  "entries": [
+    {
+      "participant": "participants/p1_sarah",
+      "name": "Sarah Chen",
+      "text": "I'll send the report by Friday.",
+      "startTime": "2026-02-24T15:00:05.123Z",
+      "endTime": "2026-02-24T15:00:12.450Z"
+    },
+    {
+      "participant": "participants/p2_marcus",
+      "name": "Marcus Vance",
+      "text": "I can review the PR tomorrow morning.",
+      "startTime": "2026-02-24T15:00:13.100Z",
+      "endTime": "2026-02-24T15:00:20.300Z"
+    }
+  ]
+}

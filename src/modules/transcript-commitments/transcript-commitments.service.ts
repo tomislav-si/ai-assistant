@@ -1,47 +1,35 @@
-import * as fs from "fs";
-import * as path from "path";
 import { createOllama } from "ollama-ai-provider-v2";
 import { generateText, Output } from "ai";
-import { z } from "zod";
+import { ChatOllama } from "@langchain/ollama";
+import { loadSummarizationChain } from "@langchain/classic/chains";
+import type { Document } from "@langchain/core/documents";
+
+import type { MemoryVectorStore } from "@langchain/classic/vectorstores/memory";
+
+import { transcriptCommitmentsSchema, type TranscriptCommitments } from "./types";
+import { loadTranscript } from "./utils";
+import { BASIC_COMMITMENT_EXTRACTION, MR_TRANSCRIPT_CHUNK, MR_TRANSCRIPT_SUMMARY } from "./prompts";
+import { getDocumentsFromVectorStore } from "../../db/in-memory/vector-store-utils";
 
 const OLLAMA_BASE_URL = "http://localhost:11434";
 const OLLAMA_MODEL = "qwen3:8b";
-
-const TRANSCRIPT_SYSTEM_PROMPT = `You are an assistant that extracts commitments from meeting transcripts. Given transcript entries (participant name, text, startTime/endTime), list every commitment: who said they will do something, what they will do, and by when. Use the mentioned deadline or infer from "today", "tomorrow", "Friday", etc.`;
-
-const transcriptCommitmentsSchema = z.object({
-  commitments: z.array(
-    z.object({
-      person: z.string().describe("Name of the person who made the commitment"),
-      action: z.string().describe("What they will do"),
-      deadline: z.string().describe("When (use mentioned deadline or infer from context)"),
-    })
-  ),
-});
-
-export type Commitment = z.infer<typeof transcriptCommitmentsSchema>["commitments"][number];
-export type TranscriptCommitments = z.infer<typeof transcriptCommitmentsSchema>;
-
-function getMockDataPath(): string {
-  const fromCwd = path.join(process.cwd(), "src", "mock-data", "transcripts", "meeting-transcript.json");
-  if (fs.existsSync(fromCwd)) return fromCwd;
-  return path.join(process.cwd(), "mock-data", "transcripts", "meeting-transcript.json");
-}
-
-function loadTranscript(): string {
-  const filePath = getMockDataPath();
-  const raw = fs.readFileSync(filePath, "utf-8");
-  const data = JSON.parse(raw) as { entries: Array<Record<string, unknown>> };
-  return JSON.stringify(data.entries, null, 2);
-}
-
 const REFRESH_INTERVAL_MS = 15 * 60 * 1000; // 15 minutes
 
 export class TranscriptCommitmentsService {
-  private cache: TranscriptCommitments | null = null;
-  private lastFetchAt: Date | null = null;
+  private basicCache: TranscriptCommitments | null = null;
+  private basicLastFetchAt: Date | null = null;
 
-  private async generateAndCache(): Promise<void> {
+  private mrCache: TranscriptCommitments | null = null;
+  private mrLastFetchAt: Date | null = null;
+
+  private vectorStore: MemoryVectorStore | null = null;
+
+  setVectorStore(store: MemoryVectorStore): void {
+    console.log("[TranscriptCommitmentsService] Setting vector store...");
+    this.vectorStore = store;
+  }
+
+  private async generateBasicTranscriptCommitmentsAndCache(): Promise<void> {
     try {
       const content = loadTranscript();
 
@@ -51,7 +39,7 @@ export class TranscriptCommitmentsService {
 
       const { output } = await generateText({
         model: ollama(OLLAMA_MODEL),
-        system: TRANSCRIPT_SYSTEM_PROMPT,
+        system: BASIC_COMMITMENT_EXTRACTION,
         prompt: `Process the following transcript and extract all commitments.\n\nContent:\n${content}`,
         output: Output.object({
           schema: transcriptCommitmentsSchema,
@@ -70,28 +58,96 @@ export class TranscriptCommitmentsService {
         },
       });
 
-      this.cache = output;
-      this.lastFetchAt = new Date();
-      console.log(`Transcript commitments cached at ${this.lastFetchAt.toISOString()}`);
+      this.basicCache = output;
+      this.basicLastFetchAt = new Date();
+      console.log(`Basic transcript commitments cached at ${this.basicLastFetchAt.toISOString()}`);
     } catch (error) {
-      console.error("Transcript commitments refresh error:", error);
+      console.error("Basic transcript commitments refresh error:", error);
     }
   }
 
-  getCachedCommitments(): { commitments: TranscriptCommitments; lastFetchAt: Date } | null {
-    if (this.cache === null || this.lastFetchAt === null) return null;
-    return { commitments: this.cache, lastFetchAt: this.lastFetchAt };
+  private async generateMapReduceTranscriptCommitmentsAndCache(): Promise<void> {
+    if (this.vectorStore === null) {
+      console.warn("Map-reduce skipped: vector store not set. Call setVectorStore() after ingestTranscripts().");
+      return;
+    }
+    try {
+      const docs = getDocumentsFromVectorStore(this.vectorStore);
+      const rawResult = await this.extractCommitments(docs);
+
+      this.mrCache = this.parseCommitmentsJson(rawResult);
+      this.mrLastFetchAt = new Date();
+      console.log(`Map-reduce transcript commitments cached at ${this.mrLastFetchAt.toISOString()}`);
+    } catch (error) {
+      console.error("Map-reduce transcript commitments refresh error:", error);
+    }
+  }
+
+  private parseCommitmentsJson(raw: string): TranscriptCommitments {
+    try {
+      const json = raw.replace(/```json\n?|\n?```/g, "").trim();
+      const parsed = transcriptCommitmentsSchema.safeParse(JSON.parse(json));
+      return parsed.success ? parsed.data : { commitments: [] };
+    } catch {
+      return { commitments: [] };
+    }
+  }
+
+  /**
+   * Extracts meeting commitments from document chunks using a Map-Reduce chain.
+   * Uses qwen3:8b via Ollama for both map (per-chunk extraction) and reduce (consolidation) phases.
+   *
+   * @param docs - Array of Document objects (chunks from ingestion phase)
+   * @returns Raw string from LLM (JSON expected, to be parsed by parseCommitmentsJson)
+   */
+  async extractCommitments(docs: Document[]): Promise<string> {
+    const llm = new ChatOllama({
+      model: OLLAMA_MODEL,
+      temperature: 0,
+    });
+
+    const chain = loadSummarizationChain(llm, {
+      type: "map_reduce",
+      combineMapPrompt: MR_TRANSCRIPT_CHUNK,
+      combinePrompt: MR_TRANSCRIPT_SUMMARY,
+    });
+
+    const result = await chain.invoke({
+      input_documents: docs,
+    });
+
+    return (result?.text as string) ?? "No commitments could be extracted.";
+  }
+
+  getBasicCachedCommitments(): { commitments: TranscriptCommitments; lastFetchAt: Date } | null {
+    if (this.basicCache === null || this.basicLastFetchAt === null) return null;
+    return { commitments: this.basicCache, lastFetchAt: this.basicLastFetchAt };
+  }
+
+  getMapReduceCachedCommitments(): { commitments: TranscriptCommitments; lastFetchAt: Date } | null {
+    if (this.mrCache === null || this.mrLastFetchAt === null) return null;
+    return { commitments: this.mrCache, lastFetchAt: this.mrLastFetchAt };
   }
 
   /**
    * Currently unnecessary because data is static (mock files).
    * Processing strategy to be determined: interval-based, event-based,
    * webhook-based, or other.
+   *
+   * @param vectorStore - Optional. If provided, sets the vector store before running the first refresh.
+   *                     Pass the store from ingestTranscripts() to ensure map-reduce has chunks available.
    */
-  startBackgroundRefresh(): void {
+  startBackgroundRefresh(vectorStore?: MemoryVectorStore): void {
+    if (vectorStore) {
+      this.setVectorStore(vectorStore);
+    }
     console.log("Starting transcript commitments background refresh (interval: 15 minutes)");
-    this.generateAndCache();
-    setInterval(() => this.generateAndCache(), REFRESH_INTERVAL_MS);
+    // this.generateBasicTranscriptCommitmentsAndCache();
+    this.generateMapReduceTranscriptCommitmentsAndCache();
+    setInterval(() => {
+      // this.generateBasicTranscriptCommitmentsAndCache();
+      this.generateMapReduceTranscriptCommitmentsAndCache();
+    }, REFRESH_INTERVAL_MS);
   }
 }
 

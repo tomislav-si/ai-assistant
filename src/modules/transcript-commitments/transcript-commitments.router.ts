@@ -1,6 +1,10 @@
 import { Router } from "express";
-import { getTranscriptCommitments } from "./transcript-commitments.controller";
+import {
+  getTranscriptCommitments,
+  getMapReduceTranscriptCommitments,
+} from "./transcript-commitments.controller";
 
 export const transcriptCommitmentsRouter = Router();
 
 transcriptCommitmentsRouter.get("/transcript-commitments", getTranscriptCommitments);
+transcriptCommitmentsRouter.get("/mr-transcript-commitments", getMapReduceTranscriptCommitments);
