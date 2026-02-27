@@ -15,10 +15,12 @@ Analyze the following transcript excerpt and list every commitment, action item,
 
 export const MR_TRANSCRIPT_SUMMARY = new PromptTemplate({
   template: `---
-The following is a list of extracted commitments from different parts of a meeting. Consolidate them into a JSON object with this exact format (no other text):
+The following is a list of extracted commitments from different parts of a meeting. Consolidate them into a JSON object with this exact format:
 {{"commitments":[{{"person":"Name","action":"What they will do","deadline":"When (infer from context or use 'Not specified')"}}]}}
 
 Remove duplicates. If the input is only 'NO_COMMITMENTS', return {{"commitments":[]}}.
+
+Output only valid JSON. No markdown, no explanations, no other text.
 
 ---
 {text}

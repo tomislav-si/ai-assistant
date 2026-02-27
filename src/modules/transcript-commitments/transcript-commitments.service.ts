@@ -1,7 +1,9 @@
 import { createOllama } from "ollama-ai-provider-v2";
 import { generateText, Output } from "ai";
 import { ChatOllama } from "@langchain/ollama";
+import { ChatOpenAI } from "@langchain/openai";
 import { loadSummarizationChain } from "@langchain/classic/chains";
+import type { BaseChatModel } from "@langchain/core/language_models/chat_models";
 import type { Document } from "@langchain/core/documents";
 
 import type { MemoryVectorStore } from "@langchain/classic/vectorstores/memory";
@@ -92,17 +94,42 @@ export class TranscriptCommitmentsService {
   }
 
   /**
-   * Extracts meeting commitments from document chunks using a Map-Reduce chain.
-   * Uses qwen3:8b via Ollama for both map (per-chunk extraction) and reduce (consolidation) phases.
-   *
-   * @param docs - Array of Document objects (chunks from ingestion phase)
-   * @returns Raw string from LLM (JSON expected, to be parsed by parseCommitmentsJson)
+   * Creates the LLM for map-reduce based on config (LLM_PROVIDER) or optional override.
+   * Use options.provider to benchmark different backends without changing env.
    */
-  async extractCommitments(docs: Document[]): Promise<string> {
-    const llm = new ChatOllama({
+  private createMapReduceLLM(providerOverride?: "ollama" | "openai"): BaseChatModel {
+    const provider = providerOverride ?? config.LLM_PROVIDER;
+
+    if (provider === "openai") {
+      if (!config.OPENAI_API_KEY) {
+        throw new Error("OPENAI_API_KEY is required when LLM_PROVIDER=openai");
+      }
+      return new ChatOpenAI({
+        model: config.OPENAI_MODEL,
+        temperature: 0,
+        apiKey: config.OPENAI_API_KEY,
+      });
+    }
+
+    return new ChatOllama({
       model: config.OLLAMA_MODEL,
       temperature: 0,
     });
+  }
+
+  /**
+   * Extracts meeting commitments from document chunks using a Map-Reduce chain.
+   * LLM backend is chosen via LLM_PROVIDER (ollama | openai). Use options.provider to override for benchmarking.
+   *
+   * @param docs - Array of Document objects (chunks from ingestion phase)
+   * @param options - Optional. provider: override config to use "ollama" or "openai" for comparison.
+   * @returns Raw string from LLM (JSON expected, to be parsed by parseCommitmentsJson)
+   */
+  async extractCommitments(
+    docs: Document[],
+    options?: { provider?: "ollama" | "openai" }
+  ): Promise<string> {
+    const llm = this.createMapReduceLLM(options?.provider);
 
     const chain = loadSummarizationChain(llm, {
       type: "map_reduce",
@@ -140,12 +167,20 @@ export class TranscriptCommitmentsService {
     if (vectorStore) {
       this.setVectorStore(vectorStore);
     }
-    console.log(`Starting transcript commitments background refresh (interval: ${config.TRANSCRIPT_REFRESH_INTERVAL_MS / 60_000} minutes)`);
-    // this.generateBasicTranscriptCommitmentsAndCache();
-    this.generateMapReduceTranscriptCommitmentsAndCache();
+    const basicEnabled = config.TRANSCRIPT_COMMITMENTS_BASIC_ENABLED;
+    const mrEnabled = config.TRANSCRIPT_COMMITMENTS_MAP_REDUCE_ENABLED;
+    if (!basicEnabled && !mrEnabled) {
+      console.log("[TranscriptCommitmentsService] Both basic and map-reduce disabled, skipping background refresh");
+      return;
+    }
+    console.log(
+      `Starting transcript commitments background refresh (interval: ${config.TRANSCRIPT_REFRESH_INTERVAL_MS / 60_000} min, basic: ${basicEnabled}, map-reduce: ${mrEnabled})`
+    );
+    if (basicEnabled) this.generateBasicTranscriptCommitmentsAndCache();
+    if (mrEnabled) this.generateMapReduceTranscriptCommitmentsAndCache();
     setInterval(() => {
-      // this.generateBasicTranscriptCommitmentsAndCache();
-      this.generateMapReduceTranscriptCommitmentsAndCache();
+      if (basicEnabled) this.generateBasicTranscriptCommitmentsAndCache();
+      if (mrEnabled) this.generateMapReduceTranscriptCommitmentsAndCache();
     }, config.TRANSCRIPT_REFRESH_INTERVAL_MS);
   }
 }
